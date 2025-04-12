@@ -1,0 +1,67 @@
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background: radial-gradient(circle at center, #1e1e1e, #000);
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.game-container {
+  text-align: center;
+}
+
+h1 {
+  margin-bottom: 10px;
+  font-size: 3em;
+  color: #00f7ff;
+}
+
+.info {
+  font-size: 1.2em;
+  margin-bottom: 10px;
+}
+
+.play-area {
+  width: 600px;
+  height: 400px;
+  border: 3px solid #00f7ff;
+  margin: 0 auto;
+  position: relative;
+  background-color: #111;
+  overflow: hidden;
+}
+
+.target {
+  width: 50px;
+  height: 50px;
+  background-color: red;
+  border-radius: 50%;
+  position: absolute;
+  cursor: pointer;
+  transition: all 0.1s;
+  animation: pulse 1s infinite ease-in-out;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+}
+
+#start-btn {
+  margin-top: 20px;
+  padding: 10px 25px;
+  font-size: 1em;
+  background-color: #00f7ff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+#start-btn:hover {
+  background-color: #00c6cc;
+}
+
