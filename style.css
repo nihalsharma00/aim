@@ -3,10 +3,7 @@ body {
   font-family: 'Segoe UI', sans-serif;
   background: radial-gradient(circle at center, #1e1e1e, #000);
   color: white;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
+  overflow: hidden;
 }
 
 .game-container {
@@ -14,9 +11,18 @@ body {
 }
 
 h1 {
-  margin-bottom: 10px;
   font-size: 3em;
   color: #00f7ff;
+  margin-bottom: 10px;
+}
+
+.settings input {
+  padding: 5px 10px;
+  font-size: 1em;
+  width: 80px;
+  text-align: center;
+  border-radius: 6px;
+  border: none;
 }
 
 .info {
@@ -40,14 +46,23 @@ h1 {
   background-color: red;
   border-radius: 50%;
   position: absolute;
-  cursor: pointer;
-  transition: all 0.1s;
   animation: pulse 1s infinite ease-in-out;
 }
 
 @keyframes pulse {
   0%, 100% { transform: scale(1); }
   50% { transform: scale(1.2); }
+}
+
+.crosshair {
+  width: 30px;
+  height: 30px;
+  border: 2px solid #00f7ff;
+  border-radius: 50%;
+  position: absolute;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  transition: transform 0.05s linear;
 }
 
 #start-btn {
@@ -64,4 +79,3 @@ h1 {
 #start-btn:hover {
   background-color: #00c6cc;
 }
-
