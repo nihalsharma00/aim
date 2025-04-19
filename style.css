@@ -1,18 +1,42 @@
-body {
+* {
   margin: 0;
-  font-family: 'Segoe UI', sans-serif;
-  background: radial-gradient(circle at center, #1e1e1e, #000);
-  color: white;
-  overflow: hidden;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-.game-container {
+html, body {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  font-family: 'Segoe UI', sans-serif;
+  color: white;
+}
+
+#bg-video {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
+  z-index: -1;
+}
+
+.overlay {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  padding: 20px;
   text-align: center;
 }
 
 h1 {
   font-size: 3em;
   color: #00f7ff;
+  margin-bottom: 10px;
+}
+
+.settings {
   margin-bottom: 10px;
 }
 
@@ -25,18 +49,31 @@ h1 {
   border: none;
 }
 
+.settings button {
+  padding: 8px 16px;
+  font-size: 1em;
+  background-color: #00f7ff;
+  border: none;
+  border-radius: 8px;
+  margin-left: 10px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.settings button:hover {
+  background-color: #00c6cc;
+}
+
 .info {
   font-size: 1.2em;
-  margin-bottom: 10px;
+  margin-bottom: 15px;
 }
 
 .play-area {
-  width: 600px;
-  height: 400px;
-  border: 3px solid #00f7ff;
-  margin: 0 auto;
+  width: 100vw;
+  height: calc(100vh - 200px);
   position: relative;
-  background-color: #111;
+  margin: 0 auto;
   overflow: hidden;
 }
 
@@ -63,19 +100,5 @@ h1 {
   pointer-events: none;
   transform: translate(-50%, -50%);
   transition: transform 0.05s linear;
-}
-
-#start-btn {
-  margin-top: 20px;
-  padding: 10px 25px;
-  font-size: 1em;
-  background-color: #00f7ff;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background-color 0.2s;
-}
-
-#start-btn:hover {
-  background-color: #00c6cc;
+  z-index: 10;
 }
