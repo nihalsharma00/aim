@@ -1,32 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Aim Practice Game</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <video autoplay muted loop id="bg-video">
-    <source src="https://v.ftcdn.net/10/03/18/23/700_F_1003182305_XLlpujtHkT2IM5jDaG8Fck7n8EmZAkM9_ST.mp4" type="video/mp4">
+  <video id="bgVideo" autoplay muted loop>
+    <source src="https://v.ftcdn.net/10/03/18/23/700_F_1003182305_XLlpujtHkT2IM5jDaG8Fck7n8EmZAkM9_ST.mp4" type="video/mp4" />
   </video>
-  
-  <div id="overlay">
-    <div id="start-screen">
-      <h1>Aim Practice</h1>
-      <label>Enter Time (30–100 sec):</label>
-      <input type="number" id="timeInput" min="30" max="100" value="60">
-      <button onclick="startGame()">Start</button>
-    </div>
-    <div id="hud">
-      <div>⏱️ Time: <span id="timer">0</span></div>
-      <div>🎯 Score: <span id="score">0</span></div>
-    </div>
+
+  <div id="startScreen">
+    <div>Enter Practice Time (30-100 sec):</div>
+    <input type="number" id="timeInput" min="30" max="100" value="60" />
+    <button onclick="startGame()">Start Game</button>
   </div>
 
-  <div id="game-container">
-    <div class="crosshair" id="crosshair"></div>
-  </div>
+  <div id="ui">Score: 0 | Time: <span id="timer">0</span></div>
+  <canvas id="gameCanvas"></canvas>
 
   <script src="script.js"></script>
 </body>
