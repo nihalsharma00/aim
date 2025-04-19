@@ -1,88 +1,102 @@
-const crosshair = document.getElementById('crosshair');
-const gameContainer = document.getElementById('game-container');
-const startScreen = document.getElementById('start-screen');
-const timerDisplay = document.getElementById('timer');
-const scoreDisplay = document.getElementById('score');
+const canvas = document.getElementById('gameCanvas');
+const ctx = canvas.getContext('2d');
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
 
-let gameInterval, targetInterval, timeLeft = 0, score = 0;
+const crosshairImg = new Image();
+crosshairImg.src = 'crosshair.png'; // Place the image in the same folder
+const crosshairSize = 15;
+
+let targets = [];
+let score = 0;
+let timer = 0;
+let gameDuration = 60;
+let gameRunning = false;
 
 document.addEventListener('mousemove', (e) => {
-  crosshair.style.left = `${e.clientX}px`;
-  crosshair.style.top = `${e.clientY}px`;
+  crosshair.x = e.clientX;
+  crosshair.y = e.clientY;
 });
 
-document.addEventListener('touchmove', (e) => {
-  const touch = e.touches[0];
-  crosshair.style.left = `${touch.clientX}px`;
-  crosshair.style.top = `${touch.clientY}px`;
+document.addEventListener('click', shoot);
+document.addEventListener('touchstart', shoot);
+document.addEventListener('keydown', (e) => {
+  if (e.code === 'Space') shoot();
 });
 
-function startGame() {
-  const inputTime = parseInt(document.getElementById('timeInput').value);
-  if (isNaN(inputTime) || inputTime < 30 || inputTime > 100) return alert('Enter time between 30-100 sec');
-
-  score = 0;
-  timeLeft = inputTime;
-  updateHUD();
-
-  startScreen.style.display = 'none';
-
-  spawnTarget();
-  targetInterval = setInterval(spawnTarget, 1000);
-  gameInterval = setInterval(() => {
-    timeLeft--;
-    updateHUD();
-    if (timeLeft <= 0) endGame();
-  }, 1000);
-}
-
-function updateHUD() {
-  timerDisplay.textContent = timeLeft;
-  scoreDisplay.textContent = score;
-}
-
-function endGame() {
-  clearInterval(gameInterval);
-  clearInterval(targetInterval);
-  document.querySelectorAll('.target').forEach(t => t.remove());
-  alert(`Time's up! Final Score: ${score}`);
-  startScreen.style.display = 'flex';
-}
+const crosshair = { x: canvas.width / 2, y: canvas.height / 2 };
 
 function spawnTarget() {
-  const target = document.createElement('div');
-  target.classList.add('target');
-  target.style.left = `${Math.random() * (window.innerWidth - 40)}px`;
-  target.style.top = `${Math.random() * (window.innerHeight - 40)}px`;
-  gameContainer.appendChild(target);
-  setTimeout(() => target.remove(), 4000);
+  const radius = 20;
+  const x = Math.random() * (canvas.width - radius * 2) + radius;
+  const y = Math.random() * (canvas.height - radius * 2) + radius;
+  targets.push({ x, y, radius });
 }
 
-function checkHit(x, y) {
-  const targets = document.querySelectorAll('.target');
-  targets.forEach(target => {
-    const rect = target.getBoundingClientRect();
-    const centerX = rect.left + rect.width / 2;
-    const centerY = rect.top + rect.height / 2;
-    const dx = x - centerX;
-    const dy = y - centerY;
+function shoot() {
+  if (!gameRunning) return;
+  for (let i = 0; i < targets.length; i++) {
+    const dx = crosshair.x - targets[i].x;
+    const dy = crosshair.y - targets[i].y;
     const distance = Math.sqrt(dx * dx + dy * dy);
-    if (distance < 7.5) {
-      target.remove();
+    if (distance < crosshairSize) {
+      targets.splice(i, 1);
       score++;
-      updateHUD();
+      break;
     }
-  });
+  }
 }
 
-document.addEventListener('click', (e) => checkHit(e.clientX, e.clientY));
-document.addEventListener('touchstart', (e) => {
-  const touch = e.touches[0];
-  checkHit(touch.clientX, touch.clientY);
-});
-document.addEventListener('keydown', (e) => {
-  if (e.code === 'Space') {
-    const rect = crosshair.getBoundingClientRect();
-    checkHit(rect.left + 7.5, rect.top + 7.5);
-  }
+function update() {
+  if (!gameRunning) return;
+
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  targets.forEach(t => {
+    ctx.beginPath();
+    ctx.arc(t.x, t.y, t.radius, 0, Math.PI * 2);
+    ctx.fillStyle = 'red';
+    ctx.fill();
+  });
+
+  ctx.drawImage(
+    crosshairImg,
+    crosshair.x - crosshairSize / 2,
+    crosshair.y - crosshairSize / 2,
+    crosshairSize,
+    crosshairSize
+  );
+
+  if (Math.random() < 0.02) spawnTarget();
+
+  requestAnimationFrame(update);
+}
+
+function startGame() {
+  const input = document.getElementById('timeInput');
+  gameDuration = Math.max(30, Math.min(100, parseInt(input.value)));
+  score = 0;
+  targets = [];
+  document.getElementById('startScreen').style.display = 'none';
+  gameRunning = true;
+  timer = gameDuration;
+  document.getElementById('timer').innerText = timer;
+
+  const countdown = setInterval(() => {
+    timer--;
+    document.getElementById('timer').innerText = timer;
+    if (timer <= 0) {
+      clearInterval(countdown);
+      gameRunning = false;
+      alert("Time's up! Your Score: " + score);
+      location.reload();
+    }
+  }, 1000);
+
+  update();
+}
+
+window.addEventListener('resize', () => {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
 });
